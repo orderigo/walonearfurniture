@@ -3,28 +3,24 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import cubeTexture from './assets/cube-texture.png'
-import marbleCoffeeTableImg from './assets/images/marble-coffeetable.png'
-import marbleCoffeeTableGlb from './assets/models/marble_coffee_table.glb?url'
-import armchairImg from './assets/images/armchair.png'
-import armchairGlb from './assets/models/armchair.glb?url'
 
 const modelsCatalog = [
   {
     id: 'marble-coffee-table',
-    image: marbleCoffeeTableImg,
-    model: marbleCoffeeTableGlb
+    image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173883/3D%20Models/image/marble-coffeetable.png',
+    model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173756/3D%20Models/marble_coffee_table.glb'
   },
   {
     id: 'armchair',
-    image: armchairImg,
-    model: armchairGlb
+    image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173789/3D%20Models/image/armchair.png',
+    model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173905/3D%20Models/armchair.glb'
   }
 ]
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
 
-  let activeModel
+  let modelGroup
 
   // Populates a cube into an XR scene and sets the initial camera position.
   const initXrScene = ({scene, camera, renderer}) => {
@@ -32,10 +28,13 @@ export const initScenePipelineModule = () => {
     renderer.shadowMap.enabled = true
 
     // Add some light to the scene.
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
     directionalLight.position.set(5, 10, 7)
     directionalLight.castShadow = true
     scene.add(directionalLight)
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
+    scene.add(ambientLight)
 
     // Add a purple cube that casts a shadow.
     const material = new THREE.MeshBasicMaterial()
@@ -45,9 +44,9 @@ export const initScenePipelineModule = () => {
     )
     material.color = new THREE.Color(0xAD50FF)
 
-    activeModel = new THREE.Group()
-    activeModel.position.set(0, 0.5, 0)
-    scene.add(activeModel)
+    modelGroup = new THREE.Group()
+    modelGroup.position.set(0, 0, 0)
+    scene.add(modelGroup)
 
     // Add a plane that can receive shadows.
     const planeGeometry = new THREE.PlaneGeometry(2000, 2000)
@@ -86,10 +85,45 @@ export const initScenePipelineModule = () => {
       // Clear static HTML if any
       bottomMenu.innerHTML = ''
 
+      const deleteBtn = document.getElementById('delete-btn')
+      let selectedModel = null
+
+      const selectModel = (model) => {
+        // Remove highlight from previously selected model
+        if (selectedModel) {
+          selectedModel.traverse((node) => {
+            if (node.isMesh && node.material && node.userData.originalEmissive !== undefined) {
+              node.material.emissive.setHex(node.userData.originalEmissive)
+            }
+          })
+        }
+
+        selectedModel = model
+        
+        if (model) {
+          deleteBtn.style.display = 'block'
+          // Add highlight overlay (Contrasting Blue)
+          model.traverse((node) => {
+            if (node.isMesh && node.material) {
+              node.material.emissive.setHex(0x0088ff) // High contrast blue
+            }
+          })
+        } else {
+          deleteBtn.style.display = 'none'
+        }
+      }
+
+      deleteBtn.addEventListener('click', () => {
+        if (selectedModel) {
+          modelGroup.remove(selectedModel)
+          selectModel(null)
+        }
+      })
+
       const loadModel = (url) => {
         loader.load(url, (gltf) => {
-          activeModel.clear()
-          const model = gltf.scene
+          const instanceGroup = new THREE.Group()
+          const model = gltf.scene.clone()
           
           // Auto-scale and center
           const box = new THREE.Box3().setFromObject(model)
@@ -106,7 +140,7 @@ export const initScenePipelineModule = () => {
           box.setFromObject(model)
           const center = box.getCenter(new THREE.Vector3())
           
-          // Center the model in X and Z, and place it at Y=0 relative to activeModel
+          // Center the model's visual bounding box inside the instanceGroup
           model.position.x = -center.x
           model.position.y = -box.min.y // place bottom at Y=0
           model.position.z = -center.z
@@ -115,9 +149,43 @@ export const initScenePipelineModule = () => {
             if (node.isMesh) {
               node.castShadow = true
               node.receiveShadow = true
+              
+              // Clone material so we can highlight instances independently
+              if (node.material) {
+                node.material = node.material.clone()
+                if (node.material.emissive) {
+                  node.userData.originalEmissive = node.material.emissive.getHex()
+                } else {
+                  node.userData.originalEmissive = 0x000000
+                }
+              }
             }
           })
-          activeModel.add(model)
+          
+          instanceGroup.add(model)
+          
+          // Spawn 1.5 meters in front of the current camera position
+          const spawnDistance = 1.5
+          const cameraDirection = new THREE.Vector3()
+          camera.getWorldDirection(cameraDirection)
+          cameraDirection.y = 0 // Keep horizontal
+          
+          if (cameraDirection.lengthSq() > 0.0001) {
+            cameraDirection.normalize()
+          } else {
+            cameraDirection.set(0, 0, -1)
+          }
+          
+          const spawnPosition = camera.position.clone().add(cameraDirection.multiplyScalar(spawnDistance))
+          spawnPosition.y = 0 // Ensure it's on the ground
+          
+          instanceGroup.position.copy(spawnPosition)
+          
+          // Make the object face the user (camera)
+          instanceGroup.lookAt(new THREE.Vector3(camera.position.x, 0, camera.position.z))
+          
+          modelGroup.add(instanceGroup)
+          selectModel(instanceGroup)
         }, undefined, (error) => {
           console.error('Error loading model:', error)
         })
@@ -128,7 +196,6 @@ export const initScenePipelineModule = () => {
         const img = document.createElement('img')
         img.src = item.image
         img.className = 'menu-item'
-        if (index === 0) img.classList.add('active')
         
         img.addEventListener('click', () => {
           // Update active styling
@@ -140,11 +207,6 @@ export const initScenePipelineModule = () => {
         
         bottomMenu.appendChild(img)
       })
-
-      // Load initial model
-      if (modelsCatalog.length > 0) {
-        loadModel(modelsCatalog[0].model)
-      }
 
       let touchState = 0
       let lastTouch1 = null
@@ -181,9 +243,11 @@ export const initScenePipelineModule = () => {
           const dx = touch.clientX - lastTouch1.clientX
           const dy = touch.clientY - lastTouch1.clientY
 
-          // Translate cube (basic pixel to world unit mapping)
-          activeModel.position.x += dx * 0.005
-          activeModel.position.z += dy * 0.005
+          // Translate selected model (basic pixel to world unit mapping)
+          if (selectedModel) {
+            selectedModel.position.x += dx * 0.005
+            selectedModel.position.z += dy * 0.005
+          }
 
           lastTouch1 = touch
         } else if (touchState === 2 && e.touches.length === 2) {
@@ -197,13 +261,15 @@ export const initScenePipelineModule = () => {
           const lastDist = getDistance(lastTouch1, lastTouch2)
           const lastAngle = getAngle(lastTouch1, lastTouch2)
 
-          // Scale
-          const scaleDiff = dist / lastDist
-          activeModel.scale.multiplyScalar(scaleDiff)
+          if (selectedModel) {
+            // Scale
+            const scaleDiff = dist / lastDist
+            selectedModel.scale.multiplyScalar(scaleDiff)
 
-          // Rotate
-          const angleDiff = angle - lastAngle
-          activeModel.rotation.y -= angleDiff
+            // Rotate
+            const angleDiff = angle - lastAngle
+            selectedModel.rotation.y -= angleDiff
+          }
 
           lastTouch1 = t1
           lastTouch2 = t2
@@ -211,9 +277,26 @@ export const initScenePipelineModule = () => {
       }, {passive: false})
 
       canvas.addEventListener('touchend', (e) => {
-        if (touchState === 1 && !touchMoved && e.touches.length === 0) {
-          // Tap! Recenter the content (similar to what it was before)
-          XR8.XrController.recenter()
+        if (touchState === 1 && !touchMoved && e.touches.length === 0 && lastTouch1) {
+          // Tap! Raycast to select model
+          const rect = canvas.getBoundingClientRect()
+          const x = ((lastTouch1.clientX - rect.left) / rect.width) * 2 - 1
+          const y = -((lastTouch1.clientY - rect.top) / rect.height) * 2 + 1
+          
+          const raycaster = new THREE.Raycaster()
+          raycaster.setFromCamera(new THREE.Vector2(x, y), camera)
+          
+          const intersects = raycaster.intersectObjects(modelGroup.children, true)
+          
+          if (intersects.length > 0) {
+            let object = intersects[0].object
+            while (object.parent && object.parent !== modelGroup) {
+              object = object.parent
+            }
+            selectModel(object)
+          } else {
+            selectModel(null)
+          }
         }
 
         if (e.touches.length === 0) {
