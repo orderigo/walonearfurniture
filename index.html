@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,22 +22,55 @@
     <link rel="stylesheet" href="src/index.css">
   </head>
   <body class="overflow-hidden w-full h-full p-0 m-0 !mt-[-1px]">
-    <!-- The main canvas used for drawing by the app. -->
-    <canvas id="camerafeed"></canvas>
-
-    <!-- Bottom menu for models -->
-    <div id="bottom-menu" class="absolute bottom-0 left-0 scrollbar-none w-full flex overflow-x-auto glass p-4 z-10 gap-4">
+    <!-- HOME SCREEN -->
+    <div id="home-screen" class="absolute inset-0 z-50 bg-base-100 flex flex-col items-center justify-center gap-6 p-6 text-center">
+      <h1 class="text-4xl font-bold text-primary">Tata Ruang AR</h1>
+      <p class="text-base-content/70 max-w-sm">Dekorasi ruangan Anda dengan simulasi furnitur 3D menggunakan Augmented Reality.</p>
+      <button id="btn-start-ar" class="btn btn-primary btn-wide text-lg mt-4">Mulai AR</button>
+      <button id="btn-tutorial" class="btn btn-outline btn-wide">Tutorial</button>
     </div>
 
-    <!-- Top right menu for selected model -->
-    <div id="top-right-menu" style="display: none;" class="shadow-lg justify-between absolute w-screen max-w-sm top-5 right-5 flex items-center gap-3 z-20 bg-base-100 p-2 ps-4 rounded">
-      <span id="model-title" class=" font-bold text-lg"></span>
-      <button id="delete-btn" class="btn btn-error btn-sm">Hapus</button>
+    <!-- TUTORIAL SCREEN -->
+    <div id="tutorial-screen" style="display: none;" class="absolute inset-0 z-50 bg-base-100 flex-col">
+      <div class="navbar bg-base-200 shadow-sm sticky top-0 z-10">
+        <div class="flex-none">
+          <button id="btn-back-home" class="btn btn-square btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+        </div>
+        <div class="flex-1">
+          <span class="text-lg font-bold">Tutorial</span>
+        </div>
+      </div>
+      <div id="tutorial-list" class="flex-1 overflow-y-auto p-4">
+        <!-- Steps will be generated here -->
+      </div>
     </div>
 
-    <!-- Popup Add button -->
-    <div id="add-menu" style="display: none;" class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
-      <button id="add-btn" class="btn btn-primary">Tambahkan</button>
+    <!-- AR UI -->
+    <div id="ar-ui" style="display: none;">
+      <!-- The main canvas used for drawing by the app. -->
+      <canvas id="camerafeed"></canvas>
+
+      <!-- Top Left Back Button -->
+      <button id="btn-back-ar" class="btn btn-circle btn-ghost absolute top-5 left-5 z-20 bg-base-100 backdrop-blur shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+      </button>
+
+      <!-- Bottom menu for models -->
+      <div id="bottom-menu" class="absolute bottom-0 left-0 scrollbar-none w-full flex overflow-x-auto bg-base-100 p-4 z-10 gap-4">
+      </div>
+
+      <!-- Top right menu for selected model -->
+      <div id="top-right-menu" style="display: none;" class="shadow-lg justify-between absolute w-screen max-w-sm top-5 right-5 flex items-center gap-3 z-20 bg-base-100 p-2 ps-4 rounded">
+        <span id="model-title" class="font-bold text-lg line-clamp-1"></span>
+        <button id="delete-btn" class="btn btn-error btn-sm">Hapus</button>
+      </div>
+
+      <!-- Popup Add button -->
+      <div id="add-menu" style="display: none;" class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+        <button id="add-btn" class="btn btn-primary">Tambahkan</button>
+      </div>
     </div>
 
     <script type="module" src="src/app.js"></script>
