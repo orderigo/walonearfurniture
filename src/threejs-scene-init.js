@@ -4,18 +4,102 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const modelsCatalog = [
   {
-    id: 'marble-coffee-table',
-    title: 'Meja Kopi Marmer',
-    image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173883/3D%20Models/image/marble-coffeetable.png',
-    model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173756/3D%20Models/marble_coffee_table.glb'
+    id: "marble-coffee-table",
+    title: "Meja Kayu",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781181257/3D%20Models/image/wood_table.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781181179/3D%20Models/wood_table.glb",
   },
   {
-    id: 'armchair',
-    title: 'Kursi Lengan',
-    image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173789/3D%20Models/image/armchair.png',
-    model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173905/3D%20Models/armchair.glb'
-  }
-]
+    id: "white-table",
+    title: "Meja Putih",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173883/3D%20Models/image/marble-coffeetable.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173756/3D%20Models/marble_coffee_table.glb",
+  },
+  {
+    id: "green-chair",
+    title: "Kursi Hijau",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/Wood_Chair.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/wood_chair.glb",
+  },
+  {
+    id: "frog-chair",
+    title: "Kursi Kodok",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/frog_chair.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/frog_chair.glb",
+  },
+  {
+    id: "modern-wood-door",
+    title: "Pintu Kayu Modern",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/modern_wood_door.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_wood_door.glb",
+  },
+  {
+    id: "modern-door",
+    title: "Pintu Modern",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/modern_door.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_door.glb",
+  },
+  {
+    id: "bed",
+    title: "Tempat Tidur",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/bed.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/bed.glb",
+  },
+  {
+    id: "bed-minecraft",
+    title: "Tempat Tidur Minecraft",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/bed_minecraft.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/bed_minecraft.glb",
+  },
+  {
+    id: "modern-wardrobe",
+    title: "Lemari Modern",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781183501/3D%20Models/image/bed_wardrobe.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_wardrobe.glb",
+  },
+  {
+    id: "wooden-wardrobe",
+    title: "Lemari Kayu",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781183326/3D%20Models/image/wooden_drawer.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/wooden_wardrobe.glb",
+  },
+  {
+    id: "table-lamp",
+    title: "Lampu Meja",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/table_lamp.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/table_lamp.glb",
+  },
+  {
+    id: "tree-lamp",
+    title: "Lampu Pohon",
+    image:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/tree_lamp.png",
+    model:
+      "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/tree_lamp.glb",
+  },
+];
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
@@ -28,13 +112,17 @@ export const initScenePipelineModule = () => {
     renderer.shadowMap.enabled = true
 
     // Add some light to the scene
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(5, 10, 7);
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2);
     scene.add(ambientLight);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 2);
+    hemiLight.position.set(0, 10, 0);
+    scene.add(hemiLight);
 
     modelGroup = new THREE.Group()
     modelGroup.position.set(0, 0, 0)
