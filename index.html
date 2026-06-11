@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>three.js: World Effects</title>
+    <title>Tata Ruang AR</title>
     <meta itemprop="name" content="three.js: World Effects">
     <meta name="twitter:title" content="three.js: World Effects">
     <meta property="og:title" content="three.js: World Effects">
@@ -21,16 +21,24 @@
 
     <link rel="stylesheet" href="src/index.css">
   </head>
-  <body>
+  <body class="overflow-hidden w-full h-full p-0 m-0 !mt-[-1px]">
     <!-- The main canvas used for drawing by the app. -->
     <canvas id="camerafeed"></canvas>
 
     <!-- Bottom menu for models -->
-    <div id="bottom-menu">
+    <div id="bottom-menu" class="absolute bottom-0 left-0 scrollbar-none w-full flex overflow-x-auto glass p-4 z-10 gap-4">
     </div>
 
-    <!-- Popup delete button -->
-    <button id="delete-btn" style="display: none;">Hapus</button>
+    <!-- Top right menu for selected model -->
+    <div id="top-right-menu" style="display: none;" class="shadow-lg justify-between absolute w-screen max-w-sm top-5 right-5 flex items-center gap-3 z-20 bg-base-100 p-2 ps-4 rounded">
+      <span id="model-title" class=" font-bold text-lg"></span>
+      <button id="delete-btn" class="btn btn-error btn-sm">Hapus</button>
+    </div>
+
+    <!-- Popup Add button -->
+    <div id="add-menu" style="display: none;" class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+      <button id="add-btn" class="btn btn-primary">Tambahkan</button>
+    </div>
 
     <script type="module" src="src/app.js"></script>
   </body>

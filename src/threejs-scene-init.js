@@ -2,16 +2,16 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import cubeTexture from './assets/cube-texture.png'
-
 const modelsCatalog = [
   {
     id: 'marble-coffee-table',
+    title: 'Meja Kopi Marmer',
     image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173883/3D%20Models/image/marble-coffeetable.png',
     model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173756/3D%20Models/marble_coffee_table.glb'
   },
   {
     id: 'armchair',
+    title: 'Kursi Lengan',
     image: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173789/3D%20Models/image/armchair.png',
     model: 'https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173905/3D%20Models/armchair.glb'
   }
@@ -23,26 +23,18 @@ export const initScenePipelineModule = () => {
   let modelGroup
 
   // Populates a cube into an XR scene and sets the initial camera position.
-  const initXrScene = ({scene, camera, renderer}) => {
+  const initXrScene = ({ scene, camera, renderer }) => {
     // Enable shadows in the rednerer.
     renderer.shadowMap.enabled = true
 
-    // Add some light to the scene.
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-    directionalLight.position.set(5, 10, 7)
-    directionalLight.castShadow = true
-    scene.add(directionalLight)
+    // Add some light to the scene
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.position.set(5, 10, 7);
+    directionalLight.castShadow = true;
+    scene.add(directionalLight);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
-    scene.add(ambientLight)
-
-    // Add a purple cube that casts a shadow.
-    const material = new THREE.MeshBasicMaterial()
-    material.side = THREE.DoubleSide
-    material.map = new THREE.TextureLoader().load(
-      cubeTexture
-    )
-    material.color = new THREE.Color(0xAD50FF)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    scene.add(ambientLight);
 
     modelGroup = new THREE.Group()
     modelGroup.position.set(0, 0, 0)
@@ -73,10 +65,10 @@ export const initScenePipelineModule = () => {
     // onStart is called once when the camera feed begins. In this case, we need to wait for the
     // XR8.Threejs scene to be ready before we can access it to add content. It was created in
     // XR8.Threejs.pipelineModule()'s onStart method.
-    onStart: ({canvas}) => {
-      const {scene, camera, renderer} = XR8.Threejs.xrScene()  // Get the 3js scene from XR8.Threejs
+    onStart: ({ canvas }) => {
+      const { scene, camera, renderer } = XR8.Threejs.xrScene()  // Get the 3js scene from XR8.Threejs
 
-      initXrScene({scene, camera, renderer})  // Add objects set the starting camera position.
+      initXrScene({ scene, camera, renderer })  // Add objects set the starting camera position.
 
       // Setup UI listeners
       const bottomMenu = document.getElementById('bottom-menu')
@@ -85,6 +77,8 @@ export const initScenePipelineModule = () => {
       // Clear static HTML if any
       bottomMenu.innerHTML = ''
 
+      const topRightMenu = document.getElementById('top-right-menu')
+      const modelTitleLabel = document.getElementById('model-title')
       const deleteBtn = document.getElementById('delete-btn')
       let selectedModel = null
 
@@ -99,9 +93,10 @@ export const initScenePipelineModule = () => {
         }
 
         selectedModel = model
-        
+
         if (model) {
-          deleteBtn.style.display = 'block'
+          topRightMenu.style.display = 'flex'
+          modelTitleLabel.textContent = model.userData.title || 'Model'
           // Add highlight overlay (Contrasting Blue)
           model.traverse((node) => {
             if (node.isMesh && node.material) {
@@ -109,7 +104,7 @@ export const initScenePipelineModule = () => {
             }
           })
         } else {
-          deleteBtn.style.display = 'none'
+          topRightMenu.style.display = 'none'
         }
       }
 
@@ -120,36 +115,36 @@ export const initScenePipelineModule = () => {
         }
       })
 
-      const loadModel = (url) => {
-        loader.load(url, (gltf) => {
+      const loadModel = (item) => {
+        loader.load(item.model, (gltf) => {
           const instanceGroup = new THREE.Group()
           const model = gltf.scene.clone()
-          
+
           // Auto-scale and center
           const box = new THREE.Box3().setFromObject(model)
           const size = box.getSize(new THREE.Vector3())
           const maxDim = Math.max(size.x, size.y, size.z)
-          
+
           // Normalize scale so the largest dimension is 1 meter
           if (maxDim > 0 && maxDim !== 1) {
             const scale = 1 / maxDim
             model.scale.set(scale, scale, scale)
           }
-          
+
           // Recompute box after scaling
           box.setFromObject(model)
           const center = box.getCenter(new THREE.Vector3())
-          
+
           // Center the model's visual bounding box inside the instanceGroup
           model.position.x = -center.x
           model.position.y = -box.min.y // place bottom at Y=0
           model.position.z = -center.z
-          
+
           model.traverse((node) => {
             if (node.isMesh) {
               node.castShadow = true
               node.receiveShadow = true
-              
+
               // Clone material so we can highlight instances independently
               if (node.material) {
                 node.material = node.material.clone()
@@ -161,29 +156,30 @@ export const initScenePipelineModule = () => {
               }
             }
           })
-          
+
+          instanceGroup.userData.title = item.title
           instanceGroup.add(model)
-          
-          // Spawn 1.5 meters in front of the current camera position
-          const spawnDistance = 1.5
+
+          // Spawn 3.0 meters in front of the current camera position
+          const spawnDistance = 3.0
           const cameraDirection = new THREE.Vector3()
           camera.getWorldDirection(cameraDirection)
           cameraDirection.y = 0 // Keep horizontal
-          
+
           if (cameraDirection.lengthSq() > 0.0001) {
             cameraDirection.normalize()
           } else {
             cameraDirection.set(0, 0, -1)
           }
-          
+
           const spawnPosition = camera.position.clone().add(cameraDirection.multiplyScalar(spawnDistance))
           spawnPosition.y = 0 // Ensure it's on the ground
-          
+
           instanceGroup.position.copy(spawnPosition)
-          
+
           // Make the object face the user (camera)
           instanceGroup.lookAt(new THREE.Vector3(camera.position.x, 0, camera.position.z))
-          
+
           modelGroup.add(instanceGroup)
           selectModel(instanceGroup)
         }, undefined, (error) => {
@@ -191,20 +187,40 @@ export const initScenePipelineModule = () => {
         })
       }
 
-      // Dynamically populate UI
+      let pendingModelToLoad = null
+      const addMenu = document.getElementById('add-menu')
+      const addBtn = document.getElementById('add-btn')
+
+      addBtn.addEventListener('click', () => {
+        if (pendingModelToLoad) {
+          loadModel(pendingModelToLoad)
+
+          // Reset add menu state after adding
+          addMenu.style.display = 'none'
+          document.querySelectorAll('.menu-item').forEach(m => {
+            m.classList.remove('ring', 'ring-primary', 'ring-8')
+          })
+          pendingModelToLoad = null
+        }
+      })
+
       modelsCatalog.forEach((item, index) => {
         const img = document.createElement('img')
         img.src = item.image
-        img.className = 'menu-item'
-        
+        img.className = 'menu-item size-20 object-cover rounded-box cursor-pointer bg-base-100 transition-all hover:scale-105 active:scale-95'
+
         img.addEventListener('click', () => {
           // Update active styling
-          document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'))
-          img.classList.add('active')
-          
-          loadModel(item.model)
+          document.querySelectorAll('.menu-item').forEach(m => {
+            m.classList.remove('ring', 'ring-primary', 'ring-8')
+          })
+          img.classList.add('ring', 'ring-primary', 'ring-8')
+
+          pendingModelToLoad = item
+          addMenu.style.display = 'flex'
+          addBtn.textContent = `Tambahkan ${item.title}`
         })
-        
+
         bottomMenu.appendChild(img)
       })
 
@@ -232,7 +248,7 @@ export const initScenePipelineModule = () => {
           lastTouch2 = e.touches[1]
           touchMoved = true
         }
-      }, {passive: false})
+      }, { passive: false })
 
       canvas.addEventListener('touchmove', (e) => {
         e.preventDefault()
@@ -274,7 +290,7 @@ export const initScenePipelineModule = () => {
           lastTouch1 = t1
           lastTouch2 = t2
         }
-      }, {passive: false})
+      }, { passive: false })
 
       canvas.addEventListener('touchend', (e) => {
         if (touchState === 1 && !touchMoved && e.touches.length === 0 && lastTouch1) {
@@ -282,12 +298,12 @@ export const initScenePipelineModule = () => {
           const rect = canvas.getBoundingClientRect()
           const x = ((lastTouch1.clientX - rect.left) / rect.width) * 2 - 1
           const y = -((lastTouch1.clientY - rect.top) / rect.height) * 2 + 1
-          
+
           const raycaster = new THREE.Raycaster()
           raycaster.setFromCamera(new THREE.Vector2(x, y), camera)
-          
+
           const intersects = raycaster.intersectObjects(modelGroup.children, true)
-          
+
           if (intersects.length > 0) {
             let object = intersects[0].object
             while (object.parent && object.parent !== modelGroup) {
@@ -309,7 +325,7 @@ export const initScenePipelineModule = () => {
 
       // Sync the xr controller's 6DoF position and camera paremeters with our scene.
       XR8.XrController.updateCameraProjectionMatrix(
-        {origin: camera.position, facing: camera.quaternion}
+        { origin: camera.position, facing: camera.quaternion }
       )
     },
   }

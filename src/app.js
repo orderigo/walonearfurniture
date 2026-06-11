@@ -1,11 +1,11 @@
 // app.js is the main entry point for your three.js 8th Wall app.
 
-import {initScenePipelineModule} from './threejs-scene-init'
+import { initScenePipelineModule } from './threejs-scene-init'
 import * as THREE from 'three';
 
 window.THREE = THREE
 
-const onxrloaded = () => {  
+const onxrloaded = () => {
   XR8.addCameraPipelineModules([  // Add camera pipeline modules.
     // Existing pipeline modules.
     XR8.GlTextureRenderer.pipelineModule(),      // Draws the camera feed.
@@ -22,7 +22,7 @@ const onxrloaded = () => {
   const canvas = document.getElementById('camerafeed')
   console.log(canvas)
   // Open the camera and start running the camera run loop.
-  XR8.run({canvas})
+  XR8.run({ canvas })
 }
 
 window.XR8 ? onxrloaded() : window.addEventListener('xrloaded', onxrloaded)
