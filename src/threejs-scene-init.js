@@ -10,10 +10,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781181257/3D%20Models/image/wood_table.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781181179/3D%20Models/wood_table.glb",
-    material: "Solid Wood",
-    dimensions: "120cm x 60cm x 45cm",
-    price: 1500000,
-    category: "Tables"
   },
   {
     id: "white-table",
@@ -22,10 +18,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173883/3D%20Models/image/marble-coffeetable.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781173756/3D%20Models/marble_coffee_table.glb",
-    material: "Marble & Metal",
-    dimensions: "100cm x 60cm x 40cm",
-    price: 2500000,
-    category: "Tables"
   },
   {
     id: "green-chair",
@@ -34,10 +26,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/Wood_Chair.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/wood_chair.glb",
-    material: "Wood & Fabric",
-    dimensions: "50cm x 50cm x 80cm",
-    price: 800000,
-    category: "Chairs"
   },
   {
     id: "frog-chair",
@@ -46,10 +34,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/frog_chair.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/frog_chair.glb",
-    material: "Plastic & Metal",
-    dimensions: "45cm x 45cm x 75cm",
-    price: 600000,
-    category: "Chairs"
   },
   {
     id: "modern-wood-door",
@@ -58,10 +42,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/modern_wood_door.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_wood_door.glb",
-    material: "Solid Wood",
-    dimensions: "210cm x 80cm x 5cm",
-    price: 3500000,
-    category: "Doors"
   },
   {
     id: "modern-door",
@@ -70,22 +50,15 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/modern_door.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_door.glb",
-    material: "Metal & Glass",
-    dimensions: "210cm x 80cm x 4cm",
-    price: 4500000,
-    category: "Doors"
   },
   {
     id: "bed",
-    title: "Tempat Tidur",
+    title: "Tempat
+ Tidur",
     image:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/bed.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/bed.glb",
-    material: "Wood & Fabric",
-    dimensions: "200cm x 150cm x 60cm",
-    price: 8500000,
-    category: "Beds"
   },
   {
     id: "bed-minecraft",
@@ -94,10 +67,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/bed_minecraft.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/bed_minecraft.glb",
-    material: "Wood & Fabric",
-    dimensions: "200cm x 100cm x 50cm",
-    price: 5500000,
-    category: "Beds"
   },
   {
     id: "modern-wardrobe",
@@ -106,10 +75,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781183501/3D%20Models/image/bed_wardrobe.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/modern_wardrobe.glb",
-    material: "Metal & Glass",
-    dimensions: "120cm x 60cm x 180cm",
-    price: 6500000,
-    category: "Storage"
   },
   {
     id: "wooden-wardrobe",
@@ -118,10 +83,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781183326/3D%20Models/image/wooden_drawer.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/wooden_wardrobe.glb",
-    material: "Solid Wood",
-    dimensions: "100cm x 50cm x 150cm",
-    price: 4800000,
-    category: "Storage"
   },
   {
     id: "table-lamp",
@@ -130,10 +91,6 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/table_lamp.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/table_lamp.glb",
-    material: "Metal & Glass",
-    dimensions: "30cm x 30cm x 50cm",
-    price: 450000,
-    category: "Lighting"
   },
   {
     id: "tree-lamp",
@@ -142,17 +99,8 @@ const modelsCatalog = [
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180327/3D%20Models/image/tree_lamp.png",
     model:
       "https://res.cloudinary.com/dv6fgxnug/image/upload/v1781180061/3D%20Models/tree_lamp.glb",
-    material: "Metal & Glass",
-    dimensions: "40cm x 40cm x 150cm",
-    price: 1200000,
-    category: "Lighting"
   },
 ];
-
-// Find model by ID
-const getModelById = (id) => {
-  return modelsCatalog.find(model => model.id === id);
-};
 
 export const initScenePipelineModule = () => {
   const purple = 0xAD50FF
@@ -161,10 +109,11 @@ export const initScenePipelineModule = () => {
 
   // Populates a cube into an XR scene and sets the initial camera position.
   const initXrScene = ({ scene, camera, renderer }) => {
-    // Enable shadows in the renderer.
+    // Enable shadows in the rednerer.
     renderer.shadowMap.enabled = true
 
-    // Add some light to the scene
+    // Add some ligh
+t to the scene
     const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
     directionalLight.position.set(5, 10, 7);
     directionalLight.castShadow = true;
@@ -218,14 +167,10 @@ export const initScenePipelineModule = () => {
       // Clear static HTML if any
       bottomMenu.innerHTML = ''
 
-      const topRightMenu = document.getElementById('top-right-menu')
+      const topRightMenu = document.getEleme
+ntById('top-right-menu')
       const modelTitleLabel = document.getElementById('model-title')
       const deleteBtn = document.getElementById('delete-btn')
-      const infoPanel = document.getElementById('ar-info-panel');
-      const btnCloseInfo = document.getElementById('btn-close-info');
-      const btnMessengerOrder = document.getElementById('btn-messenger-order');
-      const btnTelegramOrder = document.getElementById('btn-telegram-order');
-      
       let selectedModel = null
 
       const selectModel = (model) => {
@@ -261,32 +206,6 @@ export const initScenePipelineModule = () => {
         }
       })
 
-      // Close info panel
-      btnCloseInfo?.addEventListener('click', () => {
-        if (infoPanel) {
-          infoPanel.style.display = 'none';
-        }
-      });
-
-      // Order buttons in info panel
-      btnMessengerOrder?.addEventListener('click', () => {
-        const modelData = selectedModel?.userData || {};
-        const message = encodeURIComponent(`🛋️ I am interested in this furniture: ${modelData.title || 'Furniture'}
-Price: MMK ${(modelData.price || 0).toLocaleString()}
-
-I would like to place an order. Please contact me!`);
-        window.open(`https://m.me/?text=${message}`, '_blank');
-      });
-
-      btnTelegramOrder?.addEventListener('click', () => {
-        const modelData = selectedModel?.userData || {};
-        const message = encodeURIComponent(`🛋️ I am interested in this furniture: ${modelData.title || 'Furniture'}
-Price: MMK ${(modelData.price || 0).toLocaleString()}
-
-I would like to place an order. Please contact me!`);
-        window.open(`https://t.me/share?text=${message}`, '_blank');
-      });
-
       const loadModel = (item) => {
         loader.load(item.model, (gltf) => {
           const instanceGroup = new THREE.Group()
@@ -307,7 +226,8 @@ I would like to place an order. Please contact me!`);
           box.setFromObject(model)
           const center = box.getCenter(new THREE.Vector3())
 
-          // Center the model's visual bounding box inside the instanceGroup
+          // Center the model's visua
+l bounding box inside the instanceGroup
           model.position.x = -center.x
           model.position.y = -box.min.y // place bottom at Y=0
           model.position.z = -center.z
@@ -329,7 +249,7 @@ I would like to place an order. Please contact me!`);
             }
           })
 
-          instanceGroup.userData = { ...item };
+          instanceGroup.userData.title = item.title
           instanceGroup.add(model)
 
           // Spawn 3.0 meters in front of the current camera position
@@ -363,7 +283,8 @@ I would like to place an order. Please contact me!`);
       const addMenu = document.getElementById('add-menu')
       const addBtn = document.getElementById('add-btn')
 
-      addBtn.addEventListener('click', () => {
+      add
+Btn.addEventListener('click', () => {
         if (pendingModelToLoad) {
           loadModel(pendingModelToLoad)
 
@@ -400,8 +321,6 @@ I would like to place an order. Please contact me!`);
       let lastTouch1 = null
       let lastTouch2 = null
       let touchMoved = false
-      let lastTapTime = 0
-      let tapCount = 0
 
       const getDistance = (t1, t2) => {
         return Math.sqrt(Math.pow(t1.clientX - t2.clientX, 2) + Math.pow(t1.clientY - t2.clientY, 2))
@@ -413,46 +332,6 @@ I would like to place an order. Please contact me!`);
 
       canvas.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
-          const currentTime = Date.now();
-          const tapLength = currentTime - lastTapTime;
-          
-          // Check for double tap
-          if (tapLength < 300 && tapLength > 0 && !touchMoved) {
-            tapCount++;
-            if (tapCount === 2) {
-              // Double tap detected - show model info
-              const touch = e.touches[0];
-              const rect = canvas.getBoundingClientRect();
-              const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-              const y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
-
-              const raycaster = new THREE.Raycaster();
-              raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
-
-              const intersects = raycaster.intersectObjects(modelGroup.children, true);
-
-              if (intersects.length > 0) {
-                let object = intersects[0].object;
-                while (object.parent && object.parent !== modelGroup) {
-                  object = object.parent;
-                }
-                
-                // Show info panel with model data
-                if (object.userData && object.userData.title) {
-                  window.showModelInfo(object.userData);
-                }
-              }
-              
-              tapCount = 0;
-              e.preventDefault();
-              return;
-            }
-          } else {
-            tapCount = 1;
-          }
-          
-          lastTapTime = currentTime;
-          
           touchState = 1
           lastTouch1 = e.touches[0]
           touchMoved = false
@@ -461,15 +340,13 @@ I would like to place an order. Please contact me!`);
           lastTouch1 = e.touches[0]
           lastTouch2 = e.touches[1]
           touchMoved = true
-          tapCount = 0
         }
       }, { passive: false })
 
       canvas.addEventListener('touchmove', (e) => {
-        e.preventDefault()
+        e.preventDefault
+()
         touchMoved = true
-        tapCount = 0
-        
         if (touchState === 1 && e.touches.length === 1) {
           // Pan (Translate)
           const touch = e.touches[0]
@@ -523,7 +400,8 @@ I would like to place an order. Please contact me!`);
 
           if (intersects.length > 0) {
             let object = intersects[0].object
-            while (object.parent && object.parent !== modelGroup) {
+            while (object.parent && object.parent !== mo
+delGroup) {
               object = object.parent
             }
             selectModel(object)
@@ -540,13 +418,10 @@ I would like to place an order. Please contact me!`);
         }
       })
 
-      // Sync the xr controller's 6DoF position and camera parameters with our scene.
+      // Sync the xr controller's 6DoF position and camera paremeters with our scene.
       XR8.XrController.updateCameraProjectionMatrix(
         { origin: camera.position, facing: camera.quaternion }
       )
     },
   }
 }
-
-// Export model catalog for use in other modules
-export { modelsCatalog, getModelById }
