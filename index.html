@@ -3,42 +3,29 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
     <title>Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR</title>
-    <meta name="description"
-      content="Tata Ruang AR adalah aplikasi WebAR untuk memvisualisasikan dan mensimulasikan penataan furnitur interior secara real-time menggunakan Augmented Reality langsung dari browser.">
-    <meta itemprop="name"
-      content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
-    <meta itemprop="description"
-      content="Visualisasikan dan tata furnitur interior secara interaktif menggunakan teknologi WebAR, Three.js, dan 8th Wall tanpa instalasi aplikasi.">
-    <meta property="og:title"
-      content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
-    <meta property="og:site_name"
-      content="Tata Ruang AR">
-    <meta property="og:description"
-      content="Coba penataan furnitur secara virtual di ruang nyata menggunakan WebAR langsung dari browser.">
-    <meta name="twitter:title"
-      content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
-    <meta name="twitter:description"
-      content="Eksplorasi desain interior dengan Augmented Reality berbasis web menggunakan 8th Wall dan Three.js.">
-
+    <meta name="description" content="Tata Ruang AR adalah aplikasi WebAR untuk memvisualisasikan dan mensimulasikan penataan furnitur interior secara real-time menggunakan Augmented Reality langsung dari browser.">
+    <meta itemprop="name" content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
+    <meta itemprop="description" content="Visualisasikan dan tata furnitur interior secara interaktif menggunakan teknologi WebAR, Three.js, dan 8th Wall tanpa instalasi aplikasi.">
+    <meta property="og:title" content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
+    <meta property="og:site_name" content="Tata Ruang AR">
+    <meta property="og:description" content="Coba penataan furnitur secara virtual di ruang nyata menggunakan WebAR langsung dari browser.">
+    <meta name="twitter:title" content="Tata Ruang AR - Simulasi Penataan Ruang Interior Berbasis WebAR">
+    <meta name="twitter:description" content="Eksplorasi desain interior dengan Augmented Reality berbasis web menggunakan 8th Wall dan Three.js.">
     <script src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js" async crossorigin="anonymous" data-preload-chunks="slam"></script>
     <script src="https://cdn.jsdelivr.net/npm/@8thwall/xrextras@1/dist/xrextras.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@8thwall/landing-page@1/dist/landing-page.js" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <link rel="stylesheet" href="src/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   </head>
   <body class="overflow-hidden w-full h-full p-0 m-0 !mt-[-1px]">
-    <!-- HOME SCREEN -->
-    <div id="home-screen" class="absolute inset-0 z-50 bg-base-100 flex flex-col items-center justi
-fy-center gap-6 p-6 text-center">
+    <div id="home-screen" class="absolute inset-0 z-50 bg-base-100 flex flex-col items-center justify-center gap-6 p-6 text-center">
       <h1 class="text-4xl font-bold text-primary">Tata Ruang AR</h1>
       <p class="text-base-content/70 max-w-sm">Dekorasi ruangan Anda dengan simulasi furnitur 3D menggunakan Augmented Reality.</p>
       <button id="btn-start-ar" class="btn btn-primary btn-wide text-lg mt-4">Mulai AR</button>
       <button id="btn-tutorial" class="btn btn-outline btn-wide">Tutorial</button>
     </div>
-
-    <!-- TUTORIAL SCREEN -->
     <div id="tutorial-screen" style="display: none;" class="absolute inset-0 z-50 bg-base-100 flex-col">
       <div class="navbar bg-base-200 shadow-sm sticky top-0 z-10">
         <div class="flex-none">
@@ -46,41 +33,63 @@ fy-center gap-6 p-6 text-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
         </div>
-        <div class="flex-1">
-          <span class="text-lg font-bold">Tutorial</span>
-        </div>
+        <div class="flex-1"><span class="text-lg font-bold">Tutorial</span></div>
       </div>
-      <div id="tutorial-list" class="flex-1 overflow-y-auto p-4">
-        <!-- Steps will be generated here -->
-      </div>
+      <div id="tutorial-list" class="flex-1 overflow-y-auto p-4"></div>
     </div>
-
-    <!-- AR UI -->
     <div id="ar-ui" style="display: none;">
-      <!-- The main canvas used for drawing by the app. -->
       <canvas id="camerafeed"></canvas>
-
-      <!-- Top Left Back Button -->
       <button id="btn-back-ar" class="btn btn-circle btn-ghost absolute top-5 left-5 z-20 bg-base-100 backdrop-blur shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
       </button>
-
-      <!-- Bottom menu for models -->
-      <div id="bottom-menu" class="absolute bottom-0 left-0 scrollbar-none w-full flex overflow-x-auto bg-base-100 p-4 z-10 gap-4">
+      <div id="capture-controls" class="absolute top-5 right-5 z-20 flex flex-col gap-2">
+        <button id="btn-capture-photo" class="btn btn-circle btn-primary btn-sm shadow-lg" title="Take Photo"><i class="fas fa-camera"></i></button>
+        <button id="btn-capture-video" class="btn btn-circle btn-secondary btn-sm shadow-lg" title="Record Video"><i class="fas fa-video"></i></button>
       </div>
-
-      <!-- Top right menu for selected model -->
+      <div id="bottom-menu" class="absolute bottom-0 left-0 scrollbar-none w-full flex overflow-x-auto bg-base-100 p-4 z-10 gap-4"></div>
       <div id="top-right-menu" style="display: none;" class="shadow-lg justify-between absolute w-screen max-w-sm top-5 right-5 flex items-center gap-3 z-20 bg-base-100 p-2 ps-4 rounded">
         <span id="model-title" class="font-bold text-lg line-clamp-1"></span>
         <button id="delete-btn" class="btn btn-error btn-sm">Hapus</button>
       </div>
-
-      <!-- Popup Add button -->
       <div id="add-menu" style="display: none;" class="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
         <button id="add-btn" class="btn btn-primary">Tambahkan</button>
       </div>
+      <div id="ar-info-panel" style="display: none;" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 shadow-2xl border border-cyan-500/30 backdrop-blur-sm">
+        <div class="flex justify-between items-start mb-4">
+          <h3 id="info-model-title" class="text-white font-bold text-xl">Model Info</h3>
+          <button id="btn-close-info" class="text-white hover:text-cyan-400 transition-colors"><i class="fas fa-times text-xl"></i></button>
+        </div>
+        <div id="info-model-image" class="w-full h-32 bg-gray-700 rounded-lg mb-4 overflow-hidden"><img src="" alt="Model preview" class="w-full h-full object-cover"></div>
+        <div class="space-y-3 text-white/90">
+          <div class="flex justify-between"><span class="text-cyan-400">Material:</span><span id="info-material">-</span></div>
+          <div class="flex justify-between"><span class="text-cyan-400">Dimensions:</span><span id="info-dimensions">-</span></div>
+          <div class="flex justify-between"><span class="text-cyan-400">Price:</span><span id="info-price" class="text-yellow-400 font-bold">-</span></div>
+          <div class="flex justify-between"><span class="text-cyan-400">Category:</span><span id="info-category">-</span></div>
+        </div>
+        <div class="mt-6 flex gap-3">
+          <button id="btn-messenger-order" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></button>
+          <button id="btn-telegram-order" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"><i class="fab fa-telegram"></i><span>Telegram</span></button>
+        </div>
+      </div>
+      <div id="capture-preview-modal" style="display: none;" class="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+        <div class="bg-gray-900 rounded-2xl p-6 max-w-md w-full relative">
+          <button id="btn-close-preview" class="absolute top-4 right-4 text-white hover:text-gray-300"><i class="fas fa-times text-xl"></i></button>
+          <h3 class="text-white font-bold text-xl mb-4">Capture Preview</h3>
+          <div id="capture-preview-container" class="w-full h-64 bg-gray-800 rounded-lg mb-4 overflow-hidden">
+            <img id="capture-preview-image" src="" alt="Capture preview" class="w-full h-full object-cover">
+            <video id="capture-preview-video" src="" class="w-full h-full object-cover" style="display: none;"></video>
+          </div>
+          <div class="flex gap-3">
+            <button id="btn-share-messenger" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"><i class="fab fa-facebook-messenger"></i><span>Messenger</span></button>
+            <button id="btn-share-telegram" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"><i class="fab fa-telegram"></i><span>Telegram</span></button>
+          </div>
+          <button id="btn-download-capture" class="w-full mt-3 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"><i class="fas fa-download"></i><span>Download</span></button>
+        </div>
+      </div>
+      <div id="recording-indicator" style="display: none;" class="absolute top-20 left-1/2 -translate-x-1/2 z-40 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg">
+        <i class="fas fa-circle text-xs mr-2 animate-pulse"></i><span>Recording...</span><span id="recording-time" class="ml-2">00:00</span>
+      </div>
     </div>
-
     <script type="module" src="src/app.js"></script>
   </body>
 </html>
